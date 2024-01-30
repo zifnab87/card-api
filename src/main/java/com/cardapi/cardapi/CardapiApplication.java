@@ -8,6 +8,7 @@ public class CardapiApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(CardapiApplication.class, args);
+
 	}
 
 }
