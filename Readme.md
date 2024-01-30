@@ -1,44 +1,17 @@
-Database 
-==
-
-
-Pull Docker image mysql / latest
-----
-`docker pull mysql`
-
-
-Run Mysql on docker
-----
-```
-docker run --name mysql-container --network cardapi-service -p 3307:3306 -e MYSQL_ROOT_PASSWORD=root -d mysql
-```
-
-Create Schema cardapi
+Create JAR file and start Docker 
 --
-```roomsql
-CREATE SCHEMA `cardapi` DEFAULT CHARACTER SET utf8 ;
+In root of project run:
+```
+mvn package -DskipTests
 ```
 
-Spring Boot Service
-==
-
-
-Create JAR file
---
-`mvnw install`
-
-How to create Docker Image:
---
+and then 
 ```
-docker build --build-arg JAR_FILE=target/*.jar -t cardapi.com/cardapi .
-```
-How to run spring boot docker image
---
-```
-docker run --name spring-boot-container --network cardapi-service -p 8080:8080 cardapi.com/cardapi
+docker compose up
 ```
 
+- The database service starts at port: 3307 and has the schema cardapi created
+- The spring boot service starts at port: 8080
 
-
-
+***Troubleshooting:*** In case that a problem with sql dialect arises, it is due to the fact that database is not yet ready even though spring boot depends on it in docker-compose.yml (we need a proper health check there)... try docker compose up once more - it should fix it
 
