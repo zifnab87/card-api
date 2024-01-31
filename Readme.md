@@ -15,3 +15,11 @@ docker compose up
 
 ***Troubleshooting:*** In case that a problem with sql dialect arises, it is due to the fact that database is not yet ready even though spring boot depends on it in docker-compose.yml (we need a proper health check there)... try docker compose up once more - it should fix it
 
+For Development Cycle to rebuild images we do the below:
+==
+```
+docker-compose pull
+docker-compose up --force-recreate --build -d
+docker image prune -f
+```
+credit: https://stackoverflow.com/questions/49316462/how-to-update-existing-images-with-docker-compose
