@@ -1,10 +1,12 @@
 package com.cardapi.cardapi;
 
+import com.cardapi.cardapi.helpers.ValueWrapper;
 import com.cardapi.cardapi.usecases.countrycost.InitOthersCost;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -17,6 +19,8 @@ public class CardApiApplication {
 
 	private final InitOthersCost initOthersCost;
 
+	private final ValueWrapper valueWrapper;
+
 	public static void main(String[] args) {
 		SpringApplication.run(CardApiApplication.class, args);
 
@@ -24,7 +28,9 @@ public class CardApiApplication {
 
 	@EventListener(ApplicationReadyEvent.class)
 	public void afterReady() {
-		initOthersCost.command();
+		if (!valueWrapper.activeProfile.equals("test")) {
+			initOthersCost.command();
+		}
 	}
 
 	@Bean

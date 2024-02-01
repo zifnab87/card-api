@@ -1,12 +1,13 @@
 package com.cardapi.cardapi.usecases.cardcost;
 
 import com.cardapi.cardapi.adapters.persistence.cardcost.ports.FindCostByCountryPort;
-import com.cardapi.cardapi.adapters.web.bintable.ports.BinLookUp;
+import com.cardapi.cardapi.adapters.web.bintable.ports.BinLookUpPort;
 import com.cardapi.cardapi.entities.Country;
 import com.cardapi.cardapi.entities.CountryCost;
 import com.cardapi.cardapi.helpers.UseCase;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
@@ -16,7 +17,7 @@ import java.math.BigDecimal;
 public class RetrieveCardCost {
 
     private final FindCostByCountryPort findByCountryPort;
-    private final BinLookUp binLookUpPort;
+    private final BinLookUpPort binLookUpPort;
 
     public Response query(Query query) {
         String pan = query.cardNumber;
@@ -35,6 +36,8 @@ public class RetrieveCardCost {
 
 
     @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Query {
         String cardNumber;
     }

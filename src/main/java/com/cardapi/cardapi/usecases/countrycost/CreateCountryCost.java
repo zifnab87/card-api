@@ -5,8 +5,7 @@ import com.cardapi.cardapi.adapters.persistence.cardcost.ports.SaveCountryCostPo
 import com.cardapi.cardapi.entities.CountryCost;
 import com.cardapi.cardapi.entities.Country;
 import com.cardapi.cardapi.helpers.UseCase;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 
@@ -27,7 +26,9 @@ public class CreateCountryCost {
         saveCountryCostPort.save(new CountryCost(command.country, command.cost));
     }
 
-    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
     public static class Command {
         String country;
         BigDecimal cost;

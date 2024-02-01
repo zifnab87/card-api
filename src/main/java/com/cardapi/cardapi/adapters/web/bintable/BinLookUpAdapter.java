@@ -1,14 +1,16 @@
 package com.cardapi.cardapi.adapters.web.bintable;
 
-import com.cardapi.cardapi.adapters.web.bintable.ports.BinLookUp;
+import com.cardapi.cardapi.adapters.web.bintable.ports.BinLookUpPort;
 import com.cardapi.cardapi.helpers.ValueWrapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 @Component
 @RequiredArgsConstructor
-public class BinLookUpAdapter implements BinLookUp {
+@Profile("dev | prod")
+public class BinLookUpAdapter implements BinLookUpPort {
 
     private final ValueWrapper valueWrapper;
 

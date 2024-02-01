@@ -6,10 +6,7 @@ import com.cardapi.cardapi.entities.CountryCost;
 import com.cardapi.cardapi.entities.Country;
 import com.cardapi.cardapi.helpers.UseCase;
 import com.cardapi.cardapi.repositories.CountryCostRepo;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import lombok.Value;
+import lombok.*;
 
 import java.math.BigDecimal;
 
@@ -30,7 +27,9 @@ public class UpdateCountryCost {
         saveCountryCostPort.save(countryCost);
     }
 
-    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
     public static class Command {
         String country;
         BigDecimal cost;

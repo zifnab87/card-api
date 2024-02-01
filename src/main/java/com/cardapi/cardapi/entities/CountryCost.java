@@ -1,6 +1,6 @@
 package com.cardapi.cardapi.entities;
 
-import com.cardapi.cardapi.exceptions.InvalidCardCostException;
+import com.cardapi.cardapi.exceptions.InvalidCountryCostException;
 import com.cardapi.cardapi.helpers.CountryConverter;
 import com.cardapi.cardapi.helpers.CountryDeserializer;
 import com.cardapi.cardapi.helpers.CountrySerializer;
@@ -17,7 +17,6 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(uniqueConstraints = @UniqueConstraint(name = "UQ_country", columnNames = {"country"}))
 public class CountryCost {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +25,7 @@ public class CountryCost {
     @Convert(converter = CountryConverter.class)
     @JsonSerialize(converter = CountrySerializer.class)
     @JsonDeserialize(converter = CountryDeserializer.class)
+    @Column(unique = true)
     private Country country;
 
     private BigDecimal cost;
@@ -37,7 +37,7 @@ public class CountryCost {
 
     public void setCost(BigDecimal cost) {
         if (!greaterThan(cost, BigDecimal.ZERO)) {
-            throw new InvalidCardCostException("cost can't be zero or negative");
+            throw new InvalidCountryCostException("cost can't be zero or negative");
         }
         this.cost = cost;
     }
@@ -45,7 +45,5 @@ public class CountryCost {
     private static boolean greaterThan(BigDecimal left, BigDecimal right) {
         return left.compareTo(right) == 1;
     }
-
-
 
 }

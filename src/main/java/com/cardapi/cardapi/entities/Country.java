@@ -13,7 +13,7 @@ public class Country {
     private final String isoCode;
 
     public Country(String isoCode) {
-        if (!ISO_COUNTRIES.contains(isoCode) && !isoCode.equalsIgnoreCase("Others")) {
+        if (isoCode == null || (!ISO_COUNTRIES.contains(isoCode) && !isoCode.equalsIgnoreCase("Others"))) {
             throw new InvalidIsoCodeException("isoCode " + isoCode + " is invalid");
         }
         this.isoCode = isoCode;

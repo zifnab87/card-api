@@ -8,4 +8,7 @@ public class ValueWrapper {
 
     @Value("${apiKey}")
     public String apiKey;
+
+    @Value("${spring.profiles.active:}")
+    public String activeProfile;
 }
