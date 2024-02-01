@@ -3,9 +3,7 @@ package com.cardapi.cardapi.usecases.countrycost;
 import com.cardapi.cardapi.AbstractUnitTest;
 import com.cardapi.cardapi.adapters.persistence.cardcost.ports.FindCostByCountryPort;
 import com.cardapi.cardapi.adapters.persistence.cardcost.ports.SaveCountryCostPort;
-import com.cardapi.cardapi.adapters.web.bintable.ports.BinLookUpPort;
 import com.cardapi.cardapi.entities.CountryCost;
-import com.cardapi.cardapi.usecases.cardcost.RetrieveCardCost;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -16,7 +14,7 @@ import java.math.BigDecimal;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 class CreateCountryCostUnitTest extends AbstractUnitTest {
 

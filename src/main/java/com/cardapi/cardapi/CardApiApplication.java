@@ -28,9 +28,6 @@ public class CardApiApplication {
 
 	@EventListener(ApplicationReadyEvent.class)
 	public void afterReady() {
-		if (!valueWrapper.activeProfile.equals("test")) {
-			initOthersCost.command();
-		}
 	}
 
 	@Bean
