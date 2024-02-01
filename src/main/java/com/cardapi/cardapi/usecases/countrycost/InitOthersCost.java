@@ -1,9 +1,10 @@
 package com.cardapi.cardapi.usecases.countrycost;
 
-import com.cardapi.cardapi.entities.CountryCost;
+import com.cardapi.cardapi.adapters.persistence.cardcost.ports.FindCostByCountryPort;
+import com.cardapi.cardapi.adapters.persistence.cardcost.ports.SaveCountryCostPort;
 import com.cardapi.cardapi.entities.Country;
+import com.cardapi.cardapi.entities.CountryCost;
 import com.cardapi.cardapi.helpers.UseCase;
-import com.cardapi.cardapi.repositories.CountryCostRepo;
 import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
@@ -12,13 +13,14 @@ import java.math.BigDecimal;
 @RequiredArgsConstructor
 public class InitOthersCost {
 
-    private final CountryCostRepo repo;
+    private final FindCostByCountryPort findCostByCountryPort;
+    private final SaveCountryCostPort saveCountryCostPort;
 
     public void command() {
-        boolean exists = repo.findByCountry(new Country("Others")) != null;
+        boolean exists = findCostByCountryPort.findByCountry(new Country("Others")) != null;
         if (exists) {
             return;
         }
-        repo.save(new CountryCost("Others", BigDecimal.valueOf(10)));
+        saveCountryCostPort.save(new CountryCost("Others", BigDecimal.valueOf(10)));
     }
 }
