@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @Table(uniqueConstraints = @UniqueConstraint(name = "UQ_country", columnNames = {"country"}))
-public class CardCost {
+public class CountryCost {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -30,7 +30,7 @@ public class CardCost {
 
     private BigDecimal cost;
 
-    public CardCost(String isoCode, BigDecimal cost) {
+    public CountryCost(String isoCode, BigDecimal cost) {
         this.country = new Country(isoCode);
         setCost(cost);
     }

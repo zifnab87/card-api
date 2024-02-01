@@ -1,6 +1,6 @@
-package com.cardapi.cardapi.usecases.cardcost;
+package com.cardapi.cardapi.usecases.countrycost;
 
-import com.cardapi.cardapi.entities.CardCost;
+import com.cardapi.cardapi.entities.CountryCost;
 import com.cardapi.cardapi.entities.Country;
 import com.cardapi.cardapi.helpers.UseCase;
 import com.cardapi.cardapi.repositories.CardCostRepo;
@@ -11,18 +11,18 @@ import java.math.BigDecimal;
 
 @UseCase
 @RequiredArgsConstructor
-public class CreateCardCost {
+public class CreateCountryCost {
 
     private final CardCostRepo cardCostRepo;
 
-    public void command(CreateCardCost.Command command) {
+    public void command(CreateCountryCost.Command command) {
 
         boolean exists = cardCostRepo.findByCountry(new Country(command.country)) != null;
 
         if (exists) {
             throw new IllegalArgumentException("Country with isoCode "+ command.country + " already exists");
         }
-        cardCostRepo.save(new CardCost(command.country, command.cost));
+        cardCostRepo.save(new CountryCost(command.country, command.cost));
     }
 
     @Value

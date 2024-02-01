@@ -1,4 +1,4 @@
-package com.cardapi.cardapi.usecases.cardcost;
+package com.cardapi.cardapi.usecases.countrycost;
 
 import com.cardapi.cardapi.entities.Country;
 import com.cardapi.cardapi.exceptions.OthersCostCantBeDeletedException;
@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 
 @UseCase
 @RequiredArgsConstructor
-public class DeleteCardCostByCountry {
+public class DeleteCostByCountry {
 
     private final CardCostRepo cardCostRepo;
 

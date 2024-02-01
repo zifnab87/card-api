@@ -1,6 +1,6 @@
-package com.cardapi.cardapi.usecases.cardcost;
+package com.cardapi.cardapi.usecases.countrycost;
 
-import com.cardapi.cardapi.entities.CardCost;
+import com.cardapi.cardapi.entities.CountryCost;
 import com.cardapi.cardapi.entities.Country;
 import com.cardapi.cardapi.helpers.UseCase;
 import com.cardapi.cardapi.repositories.CardCostRepo;
@@ -19,6 +19,6 @@ public class InitOthersCost {
         if (exists) {
             return;
         }
-        repo.save(new CardCost("Others", BigDecimal.valueOf(12)));
+        repo.save(new CountryCost("Others", BigDecimal.valueOf(12)));
     }
 }
