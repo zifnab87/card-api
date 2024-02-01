@@ -20,7 +20,11 @@ public class RetrieveCardCost {
 
     public Response query(Query query) {
         String pan = query.cardNumber;
-        String country = binLookUpPort.binLookup("403244").getData().getCountry().getCode().toUpperCase();
+        if (pan.length() < 8 || pan.length() > 19) {
+            throw new IllegalArgumentException("PAN number should have length 8 to 19");
+        }
+        String bin = pan.substring(0, 6);
+        String country = binLookUpPort.binLookup(bin).getData().getCountry().getCode().toUpperCase();
         CountryCost res = findByCountryPort.findByCountry(new Country(country));
         if (res == null) {
             res = findByCountryPort.findByCountry(new Country("Others"));
