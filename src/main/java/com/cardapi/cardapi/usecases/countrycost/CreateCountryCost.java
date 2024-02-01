@@ -3,7 +3,9 @@ package com.cardapi.cardapi.usecases.countrycost;
 import com.cardapi.cardapi.entities.CountryCost;
 import com.cardapi.cardapi.entities.Country;
 import com.cardapi.cardapi.helpers.UseCase;
-import com.cardapi.cardapi.repositories.CardCostRepo;
+import com.cardapi.cardapi.repositories.CountryCostRepo;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
@@ -13,19 +15,19 @@ import java.math.BigDecimal;
 @RequiredArgsConstructor
 public class CreateCountryCost {
 
-    private final CardCostRepo cardCostRepo;
+    private final CountryCostRepo countryCostRepo;
 
-    public void command(CreateCountryCost.Command command) {
+    public void command(Command command) {
 
-        boolean exists = cardCostRepo.findByCountry(new Country(command.country)) != null;
+        boolean exists = countryCostRepo.findByCountry(new Country(command.country)) != null;
 
         if (exists) {
             throw new IllegalArgumentException("Country with isoCode "+ command.country + " already exists");
         }
-        cardCostRepo.save(new CountryCost(command.country, command.cost));
+        countryCostRepo.save(new CountryCost(command.country, command.cost));
     }
 
-    @Value
+    @Data
     public static class Command {
         String country;
         BigDecimal cost;

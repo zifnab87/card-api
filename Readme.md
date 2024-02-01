@@ -18,8 +18,10 @@ docker compose up
 For Development Cycle to rebuild images we do the below:
 ==
 ```
+mvn package -DskipTests
 docker-compose pull
 docker-compose up --force-recreate --build -d
 docker image prune -f
+docker compose up
 ```
 credit: https://stackoverflow.com/questions/49316462/how-to-update-existing-images-with-docker-compose

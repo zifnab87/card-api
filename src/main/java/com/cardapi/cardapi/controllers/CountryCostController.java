@@ -4,6 +4,7 @@ import com.cardapi.cardapi.entities.CountryCost;
 import com.cardapi.cardapi.usecases.countrycost.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,7 +14,7 @@ public class CountryCostController {
 
     private final CreateCountryCost createCountryCost;
     private final UpdateCountryCost updateCountryCost;
-    private final RetrieveCountryCostByCountry retrieveCountryCostByCountry;
+    private final RetrieveCostByCountry retrieveCostByCountry;
     private final RetrieveAllCountryCosts retrieveAllCountryCosts;
     private final DeleteCostByCountry deleteCostByCountry;
 
@@ -28,13 +29,13 @@ public class CountryCostController {
     }
 
     @GetMapping
-    public Page<CountryCost> queryAll() {
-        return retrieveAllCountryCosts.query();
+    public Page<CountryCost> queryAll(@RequestParam(required = false, defaultValue = "0") Integer page) {
+        return retrieveAllCountryCosts.query(PageRequest.of(page, 10));
     }
 
     @GetMapping("{isoCode}")
     public CountryCost queryByCountry(@PathVariable String isoCode) {
-        return retrieveCountryCostByCountry.query(isoCode);
+        return retrieveCostByCountry.query(isoCode);
     }
 
     @DeleteMapping("{isoCode}")

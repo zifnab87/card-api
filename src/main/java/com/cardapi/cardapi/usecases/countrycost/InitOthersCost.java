@@ -3,7 +3,7 @@ package com.cardapi.cardapi.usecases.countrycost;
 import com.cardapi.cardapi.entities.CountryCost;
 import com.cardapi.cardapi.entities.Country;
 import com.cardapi.cardapi.helpers.UseCase;
-import com.cardapi.cardapi.repositories.CardCostRepo;
+import com.cardapi.cardapi.repositories.CountryCostRepo;
 import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
@@ -12,13 +12,13 @@ import java.math.BigDecimal;
 @RequiredArgsConstructor
 public class InitOthersCost {
 
-    private final CardCostRepo repo;
+    private final CountryCostRepo repo;
 
     public void command() {
         boolean exists = repo.findByCountry(new Country("Others")) != null;
         if (exists) {
             return;
         }
-        repo.save(new CountryCost("Others", BigDecimal.valueOf(12)));
+        repo.save(new CountryCost("Others", BigDecimal.valueOf(10)));
     }
 }

@@ -14,7 +14,7 @@ import lombok.Setter;
 import java.math.BigDecimal;
 
 @Entity
-@NoArgsConstructor(force = true)
+@NoArgsConstructor
 @Getter
 @Setter
 @Table(uniqueConstraints = @UniqueConstraint(name = "UQ_country", columnNames = {"country"}))
