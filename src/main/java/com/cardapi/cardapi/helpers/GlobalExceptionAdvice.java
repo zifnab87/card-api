@@ -1,5 +1,6 @@
 package com.cardapi.cardapi.helpers;
 
+import com.cardapi.cardapi.exceptions.NotFoundException;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -10,7 +11,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
-import java.nio.file.AccessDeniedException;
 import java.util.Date;
 
 @ControllerAdvice
@@ -49,15 +49,15 @@ public class GlobalExceptionAdvice {
 //        return new ResponseEntity<>(errorDetails, HttpStatus.UNAUTHORIZED);
 //    }
 
-    @ExceptionHandler({AccessDeniedException.class})
-    public final ResponseEntity<ErrorDetails> ForbiddenHandler403(Exception ex, WebRequest request) {
-        ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(),
-                request.getDescription(false));
-
-        // we can log here for a error
-
-        return new ResponseEntity<>(errorDetails, HttpStatus.FORBIDDEN);
-    }
+//    @ExceptionHandler({AccessDeniedException.class})
+//    public final ResponseEntity<ErrorDetails> ForbiddenHandler403(Exception ex, WebRequest request) {
+//        ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(),
+//                request.getDescription(false));
+//
+//        // we can log here for a error
+//
+//        return new ResponseEntity<>(errorDetails, HttpStatus.FORBIDDEN);
+//    }
 
     @ExceptionHandler(value = {IllegalArgumentException.class})
     public final ResponseEntity<ErrorDetails> BadRequestHandler400(Exception ex, WebRequest request) {

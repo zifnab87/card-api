@@ -1,10 +1,7 @@
 package com.cardapi.cardapi.controllers;
 
 import com.cardapi.cardapi.entities.CardCost;
-import com.cardapi.cardapi.usecases.cardcost.CreateCardCost;
-import com.cardapi.cardapi.usecases.cardcost.RetrieveAllCardCosts;
-import com.cardapi.cardapi.usecases.cardcost.RetrieveCardCostByCountry;
-import com.cardapi.cardapi.usecases.cardcost.UpdateCardCost;
+import com.cardapi.cardapi.usecases.cardcost.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -18,15 +15,16 @@ public class CardCostController {
     private final UpdateCardCost updateCardCost;
     private final RetrieveCardCostByCountry retrieveCardCostByCountry;
     private final RetrieveAllCardCosts retrieveAllCardCosts;
+    private final DeleteCardCostByCountry deleteCardCostByCountry;
 
     @PostMapping
-    public void create(@RequestBody CardCost cardCost) {
-        createCardCost.command(cardCost);
+    public void create(@RequestBody CreateCardCost.Command command) {
+        createCardCost.command(command);
     }
 
     @PutMapping
-    public void update(@RequestBody CardCost cardCost) {
-        updateCardCost.command(cardCost);
+    public void update(@RequestBody UpdateCardCost.Command command) {
+        updateCardCost.command(command);
     }
 
     @GetMapping
@@ -34,8 +32,13 @@ public class CardCostController {
         return retrieveAllCardCosts.query();
     }
 
-    @GetMapping("{country}")
-    public CardCost queryAll(@PathVariable String country) {
-        return retrieveCardCostByCountry.query(country);
+    @GetMapping("{isoCode}")
+    public CardCost queryByCountry(@PathVariable String isoCode) {
+        return retrieveCardCostByCountry.query(isoCode);
+    }
+
+    @DeleteMapping("{isoCode}")
+    public void deleteByCountry(@PathVariable String isoCode) {
+        deleteCardCostByCountry.command(isoCode);
     }
 }

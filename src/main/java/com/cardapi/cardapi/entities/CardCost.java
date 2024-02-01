@@ -1,33 +1,49 @@
 package com.cardapi.cardapi.entities;
 
+import com.cardapi.cardapi.exceptions.InvalidCardCostException;
+import com.cardapi.cardapi.helpers.CountryConverter;
+import com.cardapi.cardapi.helpers.CountryDeserializer;
+import com.cardapi.cardapi.helpers.CountrySerializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 
 @Entity
+@NoArgsConstructor(force = true)
+@Getter
+@Setter
+@Table(uniqueConstraints = @UniqueConstraint(name = "UQ_country", columnNames = {"country"}))
 public class CardCost {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Embedded
-    @AttributeOverrides({
-        @AttributeOverride(name = "isoCode", column = @Column(name = "country"))
-    })
-    private final Country country;
+    @Convert(converter = CountryConverter.class)
+    @JsonSerialize(converter = CountrySerializer.class)
+    @JsonDeserialize(converter = CountryDeserializer.class)
+    private Country country;
 
-    private final BigDecimal cost;
+    private BigDecimal cost;
 
     public CardCost(String isoCode, BigDecimal cost) {
         this.country = new Country(isoCode);
-        if (greaterThan(cost, BigDecimal.ZERO)) {
-            throw new IllegalArgumentException("cost can't be zero or negative");
+        setCost(cost);
+    }
+
+    public void setCost(BigDecimal cost) {
+        if (!greaterThan(cost, BigDecimal.ZERO)) {
+            throw new InvalidCardCostException("cost can't be zero or negative");
         }
         this.cost = cost;
     }
 
     private static boolean greaterThan(BigDecimal left, BigDecimal right) {
-        return left.compareTo(right) == -1;
+        return left.compareTo(right) == 1;
     }
 
 
