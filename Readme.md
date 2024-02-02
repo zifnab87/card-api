@@ -38,7 +38,7 @@ Future Work:
 - **Logging** Considerations (we could add logging in GlobalExceptionAdvice to log all the errors from all the API endpoints)
 - **Scalability** Considerations so that we can have up to 7000 requests per minute. We need to do JMeter tests on a production-grade machine to find the limits.
    We could introduce caching for a minute on the costs matrix, we could also cache or even prefetch the bin, country pairs so we don't need to hit external endpoints
-- We could have **High Availability** of this service having multiple instances loaded, yet we are constrained for CRUD write operations from MySQL Database
+- We could have **High Availability** of this service having multiple instances loaded, yet we are constrained for CRUD write operations from MySQL Database and external network round trip to end point.
 
 
 API Documentation
