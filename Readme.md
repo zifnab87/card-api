@@ -1,6 +1,6 @@
 Description
 --
-This is am assignment involving a cost matrix per country with corresponding endpoints for CRUD under `/country-costs`.
+This is an assignment involving a cost matrix per country with corresponding endpoints for CRUD under `/country-costs`.
 Another endpoint `/payment-cards-cost` is provided that accepts a card and sends the first digits (BIN part) to en external endpoint at https://bintable.com/get-api that sends back information along with its country origin.
 **Note**: The https://bintable.com/get-api seems that it has outdated information showing my Greek MasterCard as one coming from US.
 
