@@ -1,5 +1,5 @@
 
-#please rename this file to application.yaml and add API_KEY from email attachment or your own API_KEY for https://api.bintable.com/v1/
+#please rename this file to application.yaml and replace API_KEY from email attachment or your own API_KEY for https://api.bintable.com/v1/
 
 spring:
   profiles:
