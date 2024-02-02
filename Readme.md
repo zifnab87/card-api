@@ -82,5 +82,5 @@ Troubleshooting
 --
 I had an issue in some cases with MySql in Docker that would create ROOT user without password, disallowing connections, so I had to manually remove folder `../mysql-data` and then run docker after pruning volumes, so it creates the user properly 
 ```
-volume prune && sh refresh-docker.sh
+docker volume prune && sh refresh-docker.sh
 ```
