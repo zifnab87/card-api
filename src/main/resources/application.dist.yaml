@@ -1,0 +1,33 @@
+
+#please rename to application.yaml and add API_KEY from email or your own API_KEY for https://api.bintable.com/v1/
+
+spring:
+  profiles:
+    active: dev
+
+  flyway:
+    schemas: cardapi
+    enabled: true
+    baselineOnMigrate: false
+  jpa:
+    # uncomment to create initial migration for flyway and disable spring.flyway.enabled with false value
+    #    properties:
+    #      javax:
+    #        persistence:
+    #          schema-generation:
+    #            create-source: metadata
+    #
+    #            scripts:
+    #              action: create
+    #              create-target: src/main/resources/db/whole_database.sql
+
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+  datasource:
+    username: root # of course this shouldn't be part of the commit in production
+    password: root # of course this shouldn't be part of the commit in production
+    url: jdbc:mysql://localhost:3306/cardapi?allowPublicKeyRetrieval=true&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8 #local
+
+apiKey: API_KEY
