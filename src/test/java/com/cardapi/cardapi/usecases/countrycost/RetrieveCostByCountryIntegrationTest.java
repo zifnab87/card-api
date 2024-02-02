@@ -29,6 +29,7 @@ public class RetrieveCostByCountryIntegrationTest extends AbstractIntegrationTes
 
     @BeforeEach
     public void setUp() {
+        countryCostRepo.deleteAll();
         countryCostRepo.save(new CountryCost("EG", BigDecimal.TEN));
         countryCostRepo.save(new CountryCost("Others", BigDecimal.valueOf(15)));
     }

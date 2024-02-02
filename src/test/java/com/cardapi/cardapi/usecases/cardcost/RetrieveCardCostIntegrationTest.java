@@ -25,6 +25,7 @@ public class RetrieveCardCostIntegrationTest extends AbstractIntegrationTest {
 
     @BeforeEach
     public void setUp() {
+        countryCostRepo.deleteAll();
         countryCostRepo.save(new CountryCost("EG", BigDecimal.valueOf(12.5)));
         countryCostRepo.save(new CountryCost("Others", BigDecimal.valueOf(10)));
     }

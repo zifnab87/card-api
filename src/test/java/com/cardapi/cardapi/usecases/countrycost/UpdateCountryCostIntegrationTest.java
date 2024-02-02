@@ -27,14 +27,14 @@ public class UpdateCountryCostIntegrationTest  extends AbstractIntegrationTest {
 
     @BeforeEach
     public void setUp() {
+        countryCostRepo.deleteAll();
         countryCostRepo.save(new CountryCost("EG", BigDecimal.valueOf(12.5)));
         countryCostRepo.save(new CountryCost("Others", BigDecimal.valueOf(15)));
     }
 
     @AfterEach
     public void tearDown() {
-        countryCostRepo.deleteByCountry(new Country("EG"));
-        countryCostRepo.deleteByCountry(new Country("Others"));
+        countryCostRepo.deleteAll();
     }
 
     @Test
