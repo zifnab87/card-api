@@ -10,15 +10,15 @@ The implementation is based on light version of Domain Driven Design principles 
 
 The work is influenced by `Tom Hombergs` work on https://leanpub.com/get-your-hands-dirty-on-clean-architecture and https://www.youtube.com/watch?v=cPH5AiqLQTo
 
-The reason of this choice is that it structures the code in more domain-rich way allowing for better testing, each use case is a separate class with the smallest possible dependencies, so it minimizes coupling (without introducing much duplication) that comes with MVC / N-Tier architectures.
+The reason of this choice is that it structures the code in a more domain-rich way defining each use case is a separate class with the smallest possible dependencies, minimizing coupling (without introducing much duplication) that usually comes with MVC / N-Tier architectures.
 
-Testing is becoming easier since the dependencies are usually very small (e.g specific queries) so mocking is easier leading to cleaner tests.
+Testing is becoming easier since the dependencies are usually very small (e.g specific queries/ports) so mocking is easier leading to cleaner tests.
 
 This architecture is definitely a great choice for complex domains and systems that need to evolve in a modular monolith or a set of microservices. Not a great fit for CRUD apps with little to no business logic but still as projects evolve they tend to accumulate business logic in those cases too.
 
-Contrary to pure or heavier Hexagonal Architectures, it was decided that controllers won't be adapters since we won't need any other kind of endpoints (e.g file writing etc).
+Contrary to pure or heavier Hexagonal Architectures, it was decided that controllers won't be adapters and ports since we won't need any other kind of endpoints (e.g file writing etc).
 
-Note that Spring Boot and JPA, Jackson have their own constraints e.g they always need empty constructors on Entities/Value Objects which breaks a lot of principles of pure DDD
+**Note**: Spring Boot and JPA, Jackson have their own constraints that don't play that well with DDD e.g they always need empty constructors on Entities/Value Objects which breaks a lot of principles of pure DDD
 
 Finally for simplicity and less code, Domain Entities and Jpa/ORM Entities are handled in the same classes which is also something to avoid in pure DDD.
 
