@@ -24,7 +24,8 @@ Finally for simplicity and less code, Domain Entities and Jpa/ORM Entities are h
 
 Features:
 ---
-- Dockerization
+- OpenJDK 21, Maven (Requirements)
+- MySQL and Spring Boot Dockerization (through Docker Compose)
 - Lombok for less boilerplate code
 - Flyway migrations
 - Spring Doc OpenApi Documentation
