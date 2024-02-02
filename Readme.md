@@ -43,6 +43,10 @@ API Documentation
 --
 http://localhost:8080/swagger-ui/index.html
 
+Creation of application.yaml
+--
+please rename `application.dist.yaml` to `application.yaml` and replace `API_KEY` from my email attachment or your own `API_KEY` for https://api.bintable.com/v1/
+
 Create JAR file and start Docker 
 --
 In root of project run:
