@@ -62,7 +62,7 @@ docker compose up
 - The database service starts at port: 3307 and has the schema cardapi created. The data is attached as a volume in a simbling to the git repository directory `../mysql-data`
 - The spring boot service starts at port: 8080
 
-For Development Cycle to rebuild images we run the commands below:
+For Docker Development Cycle (not needed for local) to rebuild images we run the commands below:
 --
 ```
 mvn clean
