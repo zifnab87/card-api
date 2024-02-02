@@ -27,4 +27,4 @@ spring:
     password: root # of course this shouldn't be part of the commit
     url: jdbc:mysql://localhost:3306/cardapi?allowPublicKeyRetrieval=true&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8 #local
 
-apiKey: 7796f5e80525ea1677f134fbbcfb20ee2aaa9e38 # of course this shouldn't be part of the commit
+apiKey: API_KEY # of course this shouldn't be part of the commit - please use your API_KEY for https://api.bintable.com/v1/
