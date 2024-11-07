@@ -1,8 +1,9 @@
 package com.cardapi.cardapi.puzzlysis.common;
 
-import com.cardapi.cardapi.puzzlysis.common.solutions.SolutionList;
+import com.cardapi.cardapi.puzzlysis.common.nuggets.WordList;
+
 
 public interface Solver {
     // Method to get the reconstructed solution (words list)
-    SolutionList<String> getSolution();
+    WordList<String> getSolution();
 }

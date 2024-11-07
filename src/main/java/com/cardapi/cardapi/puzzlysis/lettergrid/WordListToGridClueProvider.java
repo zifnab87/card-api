@@ -1,29 +1,25 @@
-package com.cardapi.cardapi.puzzlysis.converters.lettergrid;
+package com.cardapi.cardapi.puzzlysis.lettergrid;
 
 import com.cardapi.cardapi.puzzlysis.common.ClueProvider;
-import com.cardapi.cardapi.puzzlysis.common.clues.Clue;
-import com.cardapi.cardapi.puzzlysis.common.clues.CoordinatesClue;
-import com.cardapi.cardapi.puzzlysis.common.clues.GridClue;
-import com.cardapi.cardapi.puzzlysis.common.solutions.SolutionList;
+import com.cardapi.cardapi.puzzlysis.common.nuggets.CharacterGrid;
+import com.cardapi.cardapi.puzzlysis.common.nuggets.Nugget;
+import com.cardapi.cardapi.puzzlysis.common.nuggets.WordList;
 
 import java.util.*;
 
-
-public class WordListToCoordinatesClueProvider implements ClueProvider {
+public class WordListToGridClueProvider implements ClueProvider {
     private char[][] grid;
-    private List<Clue> clues;  // List of Clue objects (grid and coordinates separately)
+    private List<Nugget> nuggets;  // List of Clue objects (grid only)
     private int n; // Number of rows
     private int m; // Number of columns
-    private SolutionList<String> expectedSolution;  // Generalized solution interface
     private Random random;
 
     // Constructor that calculates dimensions automatically based on unique letters
-    public WordListToCoordinatesClueProvider(SolutionList<String> expectedSolution) {
-        this.expectedSolution = expectedSolution;
-        this.clues = new ArrayList<>();
+    public WordListToGridClueProvider(WordList<String> expectedSolution) {
+        this.nuggets = new ArrayList<>();
         this.random = new Random();
 
-        List<Character> uniqueLetters = collectUniqueLetters();
+        List<Character> uniqueLetters = collectUniqueLetters(expectedSolution);
         int uniqueLetterCount = uniqueLetters.size();
 
         // Calculate n and m based on the number of unique letters
@@ -41,48 +37,45 @@ public class WordListToCoordinatesClueProvider implements ClueProvider {
         }
 
         this.grid = new char[n][m];
-        createGrid();
+        createGrid(expectedSolution);
     }
 
-
     // Constructor with specified dimensions
-    public WordListToCoordinatesClueProvider(SolutionList<String> expectedSolution, int n, int m) {
-        this.expectedSolution = expectedSolution;
+    public WordListToGridClueProvider(WordList<String> expectedSolution, int n, int m) {
         this.n = n;
         this.m = m;
         this.grid = new char[n][m];
-        this.clues = new ArrayList<>();
+        this.nuggets = new ArrayList<>();
         this.random = new Random();
-        createGrid();
+        createGrid(expectedSolution);
     }
 
-
-
     // Method to initialize and fill the grid
-    private void createGrid() {
-        List<Character> letters = collectUniqueLetters();
+    private void createGrid(WordList<String> expectedSolution) {
+        List<Character> letters = collectUniqueLetters(expectedSolution);
         if (letters.size() > m * n) {
             throw new IllegalArgumentException("Unique letters exceed grid capacity.");
         }
         fillWithRandomLetters(letters);
         populateGrid(letters);
-        recordWordCoordinates();
+        recordGridClue();
     }
 
+    // Method to print the grid clue
     public void printClues() {
-        for (var clue : clues) {
+        for (var clue : nuggets) {
             clue.print();
         }
     }
 
-    // Method to get the list of clues
+    // Method to get the list of nuggets
     @Override
-    public List<Clue> getClues() {
-        return clues;
+    public List<Nugget> getClues() {
+        return nuggets;
     }
 
     // Collect unique letters from words
-    private List<Character> collectUniqueLetters() {
+    private List<Character> collectUniqueLetters(WordList<String> expectedSolution) {
         Set<Character> uniqueLettersSet = new HashSet<>();
         for (String word : expectedSolution.getItems()) {
             for (char letter : word.toCharArray()) {
@@ -112,25 +105,8 @@ public class WordListToCoordinatesClueProvider implements ClueProvider {
         }
     }
 
-    // Record the 1-indexed coordinates for each word's letters
-    private void recordWordCoordinates() {
-        clues.add(new GridClue(grid));  // Add grid clue
-
-        for (String word : expectedSolution.getItems()) {
-            List<int[]> coordinates = new ArrayList<>();
-            for (char letter : word.toCharArray()) {
-                boolean found = false;
-                for (int i = 0; i < n && !found; i++) {
-                    for (int j = 0; j < m && !found; j++) {
-                        if (grid[i][j] == letter) {
-                            coordinates.add(new int[] { i + 1, j + 1 });
-                            found = true;
-                        }
-                    }
-                }
-            }
-            clues.add(new CoordinatesClue(coordinates));  // Add coordinates clue
-        }
+    // Record the grid clue
+    private void recordGridClue() {
+        nuggets.add(new CharacterGrid(grid));  // Add grid clue
     }
-
 }

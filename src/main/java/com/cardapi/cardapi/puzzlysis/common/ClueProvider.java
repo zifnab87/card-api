@@ -1,9 +1,9 @@
 package com.cardapi.cardapi.puzzlysis.common;
 
-import com.cardapi.cardapi.puzzlysis.common.clues.Clue;
+import com.cardapi.cardapi.puzzlysis.common.nuggets.Nugget;
 
 import java.util.List;
 
 public interface ClueProvider {
-    List<Clue> getClues();
+    List<Nugget> getClues();
 }

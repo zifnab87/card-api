@@ -1,11 +1,11 @@
-package com.cardapi.cardapi.puzzlysis.common.solutions;
+package com.cardapi.cardapi.puzzlysis.common.nuggets;
 
 import java.util.List;
 
-public class SolutionList<T> {
+public class WordList<T> implements Nugget {
     private List<T> items;
 
-    public SolutionList(List<T> words) {
+    public WordList(List<T> words) {
         this.items = words;
     }
 
@@ -13,6 +13,7 @@ public class SolutionList<T> {
         return items;
     }
 
+    @Override
     public void print() {
         System.out.println("\nSolution ->");
         for (var item : this.items) {

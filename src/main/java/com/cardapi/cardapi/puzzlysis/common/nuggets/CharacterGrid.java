@@ -1,9 +1,9 @@
-package com.cardapi.cardapi.puzzlysis.common.clues;
+package com.cardapi.cardapi.puzzlysis.common.nuggets;
 
-public class GridClue implements Clue {
+public class CharacterGrid implements Nugget {
     private char[][] grid;
 
-    public GridClue(char[][] grid) {
+    public CharacterGrid(char[][] grid) {
         this.grid = grid;
     }
 

@@ -1,11 +1,11 @@
-package com.cardapi.cardapi.puzzlysis.common.clues;
+package com.cardapi.cardapi.puzzlysis.common.nuggets;
 
 import java.util.List;
 
-public class CoordinatesClue implements Clue {
+public class CoordinateList implements Nugget {
     private List<int[]> coordinates;
 
-    public CoordinatesClue(List<int[]> coordinates) {
+    public CoordinateList(List<int[]> coordinates) {
         this.coordinates = coordinates;
     }
 
