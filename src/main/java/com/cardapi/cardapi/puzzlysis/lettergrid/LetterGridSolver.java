@@ -1,7 +1,7 @@
 package com.cardapi.cardapi.puzzlysis.lettergrid;
 
 import com.cardapi.cardapi.puzzlysis.common.Solver;
-import com.cardapi.cardapi.puzzlysis.common.nuggets.CoordinateList;
+import com.cardapi.cardapi.puzzlysis.common.nuggets.CoordinatePairList;
 import com.cardapi.cardapi.puzzlysis.common.nuggets.CharacterGrid;
 import com.cardapi.cardapi.puzzlysis.common.nuggets.Nugget;
 import com.cardapi.cardapi.puzzlysis.common.nuggets.WordList;
@@ -10,22 +10,37 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class LetterGridSolver implements Solver {
+public class LetterGridSolver implements Solver<WordList> {
     private CharacterGrid grid;
-    private List<CoordinateList> coordinateList; // List of CoordinatesClue
-    private WordList<String> wordList;  // Reconstructed solution (words list)
+    private List<CoordinatePairList> coordinatePairList;
+    private WordList wordList;
+
+    private final List<Nugget> inputNuggets = new ArrayList<>();
+
+    public LetterGridSolver(List<Nugget> nuggets) {
+        this(
+                nuggets.stream().filter(n -> n instanceof CharacterGrid).map(n -> (CharacterGrid) n).findFirst()
+                        .orElseThrow(()-> { throw new IllegalArgumentException("no grid found");})
+                ,
+                nuggets.stream().filter(n -> n instanceof CoordinatePairList).map(n -> (CoordinatePairList) n).collect(Collectors.toList())
+        );
+        this.addInput(nuggets);
+    }
+
 
     // Constructor that takes GridClue and CoordinatesClue list
-    public LetterGridSolver(CharacterGrid grid, List<CoordinateList> coordinateList) {
+    public LetterGridSolver(CharacterGrid grid, List<CoordinatePairList> coordinatePairList) {
 
         if (grid == null) {
             throw new IllegalArgumentException("nuggets didn't a single cotnain GridClue");
         }
-        var coordinatesClues = coordinateList;
+        var coordinatesClues = coordinatePairList;
 
         this.grid = grid;  // Retrieve grid from GridClue
-        this.coordinateList = coordinatesClues;
-        this.wordList = new WordList<>(new ArrayList<>());
+        this.coordinatePairList = coordinatesClues;
+        this.wordList = new WordList(new ArrayList<>());
+        this.inputNuggets.add(grid);
+        this.addInput(grid).addInput(coordinatePairList);
         solve();
     }
 
@@ -34,7 +49,7 @@ public class LetterGridSolver implements Solver {
 
     // Method to solve and reconstruct the solution
     private void solve() {
-        for (CoordinateList coordinatesClue : coordinateList) {
+        for (CoordinatePairList coordinatesClue : coordinatePairList) {
             List<int[]> coordinates = coordinatesClue.getCoordinates();
             StringBuilder word = new StringBuilder();
 
@@ -52,8 +67,13 @@ public class LetterGridSolver implements Solver {
 
     @Override
     // Method to get the reconstructed solution (words list)
-    public WordList<String> getSolution() {
+    public WordList getSolution() {
         return wordList;
+    }
+
+    @Override
+    public List<Nugget> getInputNuggets() {
+        return inputNuggets;
     }
 
     public void printSolution() {

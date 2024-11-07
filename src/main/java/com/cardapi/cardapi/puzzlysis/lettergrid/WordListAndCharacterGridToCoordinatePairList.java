@@ -1,28 +1,39 @@
 package com.cardapi.cardapi.puzzlysis.lettergrid;
 
-import com.cardapi.cardapi.puzzlysis.common.ClueProvider;
-import com.cardapi.cardapi.puzzlysis.common.nuggets.Nugget;
+import com.cardapi.cardapi.puzzlysis.common.NuggetProvider;
 
-import com.cardapi.cardapi.puzzlysis.common.nuggets.CoordinateList;
+import com.cardapi.cardapi.puzzlysis.common.nuggets.CoordinatePairList;
 import com.cardapi.cardapi.puzzlysis.common.nuggets.CharacterGrid;
+import com.cardapi.cardapi.puzzlysis.common.nuggets.Nugget;
 import com.cardapi.cardapi.puzzlysis.common.nuggets.WordList;
 
 
 import java.util.*;
 
 
-public class WordListAndGridToCoordinatesClueProvider implements ClueProvider {
+public class WordListAndCharacterGridToCoordinatePairList implements NuggetProvider<CoordinatePairList> {
     CharacterGrid grid;
-    private List<Nugget> nuggets;  // List of Clue objects (grid and coordinates separately)
+    private List<CoordinatePairList> coordinatePairList;  // List of Clue objects (grid and coordinates separately)
     private int n; // Number of rows
     private int m; // Number of columns
-    private WordList<String> wordList;  // Generalized solution interface
+    private WordList wordList;  // Generalized solution interface
     private Random random;
+    private final List<Nugget> inputNuggets = new ArrayList<>();
 
-    // Constructor that calculates dimensions automatically based on unique letters
-    public WordListAndGridToCoordinatesClueProvider(CharacterGrid grid, WordList<String> wordList) {
+    public WordListAndCharacterGridToCoordinatePairList(List<Nugget> nuggets) {
+        this(
+            nuggets.stream().filter(n -> n instanceof CharacterGrid).map(n -> (CharacterGrid) n).findFirst()
+            .orElseThrow(()-> { throw new IllegalArgumentException("no grid found");})
+                ,
+            nuggets.stream().filter(n -> n instanceof WordList).map(n -> (WordList) n).findFirst()
+            .orElseThrow(()-> { throw new IllegalArgumentException("no wordlist found");})
+        );
+        this.addInput(nuggets);
+    }
+
+    public WordListAndCharacterGridToCoordinatePairList(CharacterGrid grid, WordList wordList) {
         this.wordList = wordList;
-        this.nuggets = new ArrayList<>();
+        this.coordinatePairList = new ArrayList<>();
         this.random = new Random();
         this.grid = grid;
 
@@ -32,7 +43,10 @@ public class WordListAndGridToCoordinatesClueProvider implements ClueProvider {
 
         // Adjust m if necessary to ensure enough space
         createGrid();
+        this.addInput(grid).addInput(wordList);
     }
+
+
 
 
 
@@ -46,17 +60,16 @@ public class WordListAndGridToCoordinatesClueProvider implements ClueProvider {
         populateGrid(letters);
         recordWordCoordinates();
     }
-
-    public void printClues() {
-        for (var clue : nuggets) {
-            clue.print();
-        }
+    @Override
+    public List<Nugget> getInputNuggets() {
+        return inputNuggets;
     }
+
 
     // Method to get the list of nuggets
     @Override
-    public List<Nugget> getClues() {
-        return nuggets;
+    public List<CoordinatePairList> getOutputNuggets() {
+        return coordinatePairList;
     }
 
     // Collect unique letters from words
@@ -108,7 +121,7 @@ public class WordListAndGridToCoordinatesClueProvider implements ClueProvider {
                     }
                 }
             }
-            nuggets.add(new CoordinateList(coordinates));  // Add coordinates clue
+            coordinatePairList.add(new CoordinatePairList(coordinates));  // Add coordinates clue
         }
     }
 

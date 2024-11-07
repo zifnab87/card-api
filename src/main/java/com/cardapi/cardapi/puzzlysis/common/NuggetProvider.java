@@ -1,23 +1,22 @@
 package com.cardapi.cardapi.puzzlysis.common;
 
-
+import com.cardapi.cardapi.puzzlysis.common.nuggets.CoordinatePairList;
 import com.cardapi.cardapi.puzzlysis.common.nuggets.Nugget;
 
 import java.util.List;
 
-public interface Solver<T extends Nugget> {
-    // Method to get the reconstructed solution (words list)
-    T getSolution();
-
+public interface NuggetProvider<T extends Nugget> {
     List<Nugget> getInputNuggets();
 
-    default Solver addInput(Nugget nugget) {
+    default NuggetProvider addInput(Nugget nugget) {
         this.getInputNuggets().add(nugget);
         return this;
     }
 
-    default Solver addInput(List<Nugget> nuggets) {
+    default NuggetProvider addInput(List<Nugget> nuggets) {
         this.getInputNuggets().addAll(nuggets);
         return this;
     }
+
+    List<T> getOutputNuggets();
 }

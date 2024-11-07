@@ -1,25 +1,36 @@
 package com.cardapi.cardapi.puzzlysis.lettergrid;
 
-import com.cardapi.cardapi.puzzlysis.common.ClueProvider;
+import com.cardapi.cardapi.puzzlysis.common.NuggetProvider;
 import com.cardapi.cardapi.puzzlysis.common.nuggets.CharacterGrid;
 import com.cardapi.cardapi.puzzlysis.common.nuggets.Nugget;
 import com.cardapi.cardapi.puzzlysis.common.nuggets.WordList;
 
 import java.util.*;
 
-public class WordListToGridClueProvider implements ClueProvider {
+public class WordListToCharacterGrid implements NuggetProvider<CharacterGrid> {
     private char[][] grid;
-    private List<Nugget> nuggets;  // List of Clue objects (grid only)
+    private Random random;
+    private final List<Nugget> inputNuggets = new ArrayList<>();
+
     private int n; // Number of rows
     private int m; // Number of columns
-    private Random random;
+    private CharacterGrid characterGrid;  // List of Clue objects (grid only)
+
+
+    public WordListToCharacterGrid(List<Nugget> nuggets) {
+        this(
+                nuggets.stream().filter(n -> n instanceof WordList).map(n -> (WordList) n).findFirst()
+                        .orElseThrow(()-> { throw new IllegalArgumentException("no wordlist found");})
+        );
+        this.inputNuggets.addAll(nuggets);
+
+    }
 
     // Constructor that calculates dimensions automatically based on unique letters
-    public WordListToGridClueProvider(WordList<String> expectedSolution) {
-        this.nuggets = new ArrayList<>();
+    public WordListToCharacterGrid(WordList wordList) {
         this.random = new Random();
 
-        List<Character> uniqueLetters = collectUniqueLetters(expectedSolution);
+        List<Character> uniqueLetters = collectUniqueLetters(wordList);
         int uniqueLetterCount = uniqueLetters.size();
 
         // Calculate n and m based on the number of unique letters
@@ -37,47 +48,44 @@ public class WordListToGridClueProvider implements ClueProvider {
         }
 
         this.grid = new char[n][m];
-        createGrid(expectedSolution);
+        createGrid(wordList);
     }
 
     // Constructor with specified dimensions
-    public WordListToGridClueProvider(WordList<String> expectedSolution, int n, int m) {
+    public WordListToCharacterGrid(WordList wordList, int n, int m) {
         this.n = n;
         this.m = m;
         this.grid = new char[n][m];
-        this.nuggets = new ArrayList<>();
         this.random = new Random();
-        createGrid(expectedSolution);
+        createGrid(wordList);
     }
 
     // Method to initialize and fill the grid
-    private void createGrid(WordList<String> expectedSolution) {
-        List<Character> letters = collectUniqueLetters(expectedSolution);
+    private void createGrid(WordList wordList) {
+        List<Character> letters = collectUniqueLetters(wordList);
         if (letters.size() > m * n) {
             throw new IllegalArgumentException("Unique letters exceed grid capacity.");
         }
         fillWithRandomLetters(letters);
         populateGrid(letters);
-        recordGridClue();
+        characterGrid = new CharacterGrid(grid);
     }
 
-    // Method to print the grid clue
-    public void printClues() {
-        for (var clue : nuggets) {
-            clue.print();
-        }
+    @Override
+    public List<Nugget> getInputNuggets() {
+        return inputNuggets;
     }
 
     // Method to get the list of nuggets
     @Override
-    public List<Nugget> getClues() {
-        return nuggets;
+    public List<CharacterGrid> getOutputNuggets() {
+        return List.of(characterGrid);
     }
 
     // Collect unique letters from words
-    private List<Character> collectUniqueLetters(WordList<String> expectedSolution) {
+    private List<Character> collectUniqueLetters(WordList wordList) {
         Set<Character> uniqueLettersSet = new HashSet<>();
-        for (String word : expectedSolution.getItems()) {
+        for (String word : wordList.getItems()) {
             for (char letter : word.toCharArray()) {
                 uniqueLettersSet.add(letter);
             }
@@ -105,8 +113,5 @@ public class WordListToGridClueProvider implements ClueProvider {
         }
     }
 
-    // Record the grid clue
-    private void recordGridClue() {
-        nuggets.add(new CharacterGrid(grid));  // Add grid clue
-    }
+
 }

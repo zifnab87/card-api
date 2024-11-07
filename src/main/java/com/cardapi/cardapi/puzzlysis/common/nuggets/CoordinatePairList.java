@@ -2,10 +2,10 @@ package com.cardapi.cardapi.puzzlysis.common.nuggets;
 
 import java.util.List;
 
-public class CoordinateList implements Nugget {
+public class CoordinatePairList implements Nugget {
     private List<int[]> coordinates;
 
-    public CoordinateList(List<int[]> coordinates) {
+    public CoordinatePairList(List<int[]> coordinates) {
         this.coordinates = coordinates;
     }
 

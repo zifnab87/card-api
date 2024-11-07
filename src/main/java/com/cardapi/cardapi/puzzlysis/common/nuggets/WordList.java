@@ -2,20 +2,20 @@ package com.cardapi.cardapi.puzzlysis.common.nuggets;
 
 import java.util.List;
 
-public class WordList<T> implements Nugget {
-    private List<T> items;
+public class WordList implements Nugget {
+    private List<String> items;
 
-    public WordList(List<T> words) {
+    public WordList(List<String> words) {
         this.items = words;
     }
 
-    public List<T> getItems() {
+    public List<String> getItems() {
         return items;
     }
 
     @Override
     public void print() {
-        System.out.println("\nSolution ->");
+        System.out.println("\nWord List ->");
         for (var item : this.items) {
             System.out.println(item);
         }
