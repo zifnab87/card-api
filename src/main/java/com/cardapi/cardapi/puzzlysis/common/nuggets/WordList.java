@@ -14,10 +14,11 @@ public class WordList implements Nugget {
     }
 
     @Override
-    public void print() {
-        System.out.println("\nWord List ->");
+    public String toString() {
+        StringBuilder sb = new StringBuilder("\n\t"+this.getClass().getSimpleName()+" [\n");
         for (var item : this.items) {
-            System.out.println(item);
+            sb.append("\t\t"+item).append("\n");
         }
+        return sb.append("\t]\n").toString();
     }
 }

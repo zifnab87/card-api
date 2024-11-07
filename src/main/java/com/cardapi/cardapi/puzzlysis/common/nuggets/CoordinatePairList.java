@@ -13,12 +13,15 @@ public class CoordinatePairList implements Nugget {
         return coordinates;
     }
 
+
+
     @Override
-    public void print() {
-        System.out.println("\nCoordinates -> ");
+    public String toString() {
+        StringBuilder sb = new StringBuilder("\n\t"+this.getClass().getSimpleName()+" [\n");
+        sb.append("\t\t");
         for (int[] coord : coordinates) {
-            System.out.print("[" + coord[0] + ", " + coord[1] + "] ");
+            sb.append(" [").append(coord[0]).append(", ").append(coord[1]).append("] ");
         }
-        System.out.println();
+        return sb.append("\n\t]\n").toString();
     }
 }

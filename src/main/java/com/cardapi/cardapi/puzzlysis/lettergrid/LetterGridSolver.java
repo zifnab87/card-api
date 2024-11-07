@@ -1,8 +1,8 @@
 package com.cardapi.cardapi.puzzlysis.lettergrid;
 
-import com.cardapi.cardapi.puzzlysis.common.Solver;
-import com.cardapi.cardapi.puzzlysis.common.nuggets.CoordinatePairList;
+import com.cardapi.cardapi.puzzlysis.common.ConverterTo;
 import com.cardapi.cardapi.puzzlysis.common.nuggets.CharacterGrid;
+import com.cardapi.cardapi.puzzlysis.common.nuggets.CoordinatePairList;
 import com.cardapi.cardapi.puzzlysis.common.nuggets.Nugget;
 import com.cardapi.cardapi.puzzlysis.common.nuggets.WordList;
 
@@ -10,73 +10,45 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class LetterGridSolver implements Solver<WordList> {
-    private CharacterGrid grid;
-    private List<CoordinatePairList> coordinatePairList;
-    private WordList wordList;
+public class LetterGridSolver implements ConverterTo<WordList> {
 
-    private final List<Nugget> inputNuggets = new ArrayList<>();
-
-    public LetterGridSolver(List<Nugget> nuggets) {
-        this(
-                nuggets.stream().filter(n -> n instanceof CharacterGrid).map(n -> (CharacterGrid) n).findFirst()
-                        .orElseThrow(()-> { throw new IllegalArgumentException("no grid found");})
-                ,
-                nuggets.stream().filter(n -> n instanceof CoordinatePairList).map(n -> (CoordinatePairList) n).collect(Collectors.toList())
-        );
-        this.addInput(nuggets);
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName();
     }
 
+    @Override
+    public List<WordList> apply(List<Nugget> nuggets) {
+        // Extract CharacterGrid and CoordinatePairList from nuggets
+        CharacterGrid grid = nuggets.stream()
+                .filter(n -> n instanceof CharacterGrid)
+                .map(n -> (CharacterGrid) n)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("No CharacterGrid found"));
 
-    // Constructor that takes GridClue and CoordinatesClue list
-    public LetterGridSolver(CharacterGrid grid, List<CoordinatePairList> coordinatePairList) {
+        List<CoordinatePairList> coordinatePairList = nuggets.stream()
+                .filter(n -> n instanceof CoordinatePairList)
+                .map(n -> (CoordinatePairList) n)
+                .collect(Collectors.toList());
 
-        if (grid == null) {
-            throw new IllegalArgumentException("nuggets didn't a single cotnain GridClue");
-        }
-        var coordinatesClues = coordinatePairList;
-
-        this.grid = grid;  // Retrieve grid from GridClue
-        this.coordinatePairList = coordinatesClues;
-        this.wordList = new WordList(new ArrayList<>());
-        this.inputNuggets.add(grid);
-        this.addInput(grid).addInput(coordinatePairList);
-        solve();
+        return apply(grid, coordinatePairList);
     }
 
+    public List<WordList> apply(CharacterGrid grid, List<CoordinatePairList> coordinatePairList) {
+        List<String> words = new ArrayList<>();
 
-
-
-    // Method to solve and reconstruct the solution
-    private void solve() {
         for (CoordinatePairList coordinatesClue : coordinatePairList) {
-            List<int[]> coordinates = coordinatesClue.getCoordinates();
             StringBuilder word = new StringBuilder();
 
-            // For each coordinate, get the corresponding letter from the grid
-            for (int[] coord : coordinates) {
+            for (int[] coord : coordinatesClue.getCoordinates()) {
                 int row = coord[0] - 1; // Convert to 0-indexed
                 int col = coord[1] - 1; // Convert to 0-indexed
                 word.append(grid.getGrid()[row][col]);
             }
 
-            // Add the reconstructed word to the solution
-            wordList.getItems().add(word.toString());
+            words.add(word.toString());
         }
-    }
 
-    @Override
-    // Method to get the reconstructed solution (words list)
-    public WordList getSolution() {
-        return wordList;
-    }
-
-    @Override
-    public List<Nugget> getInputNuggets() {
-        return inputNuggets;
-    }
-
-    public void printSolution() {
-        wordList.print();
+        return List.of(new WordList(words)); // Return the reconstructed WordList
     }
 }

@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface Nugget {
-    void print();
+    default void print() {
+        System.out.println(this);
+    }
 
     default List<Nugget> wrapToList() {
         var array = new ArrayList<Nugget>();

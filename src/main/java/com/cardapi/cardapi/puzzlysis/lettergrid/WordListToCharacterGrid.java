@@ -1,42 +1,39 @@
 package com.cardapi.cardapi.puzzlysis.lettergrid;
 
-import com.cardapi.cardapi.puzzlysis.common.NuggetProvider;
+import com.cardapi.cardapi.puzzlysis.common.ConverterTo;
 import com.cardapi.cardapi.puzzlysis.common.nuggets.CharacterGrid;
+import com.cardapi.cardapi.puzzlysis.common.nuggets.CoordinatePairList;
 import com.cardapi.cardapi.puzzlysis.common.nuggets.Nugget;
 import com.cardapi.cardapi.puzzlysis.common.nuggets.WordList;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 
-public class WordListToCharacterGrid implements NuggetProvider<CharacterGrid> {
-    private char[][] grid;
-    private Random random;
-    private final List<Nugget> inputNuggets = new ArrayList<>();
+public class WordListToCharacterGrid implements ConverterTo<CharacterGrid> {
 
-    private int n; // Number of rows
-    private int m; // Number of columns
-    private CharacterGrid characterGrid;  // List of Clue objects (grid only)
-
-
-    public WordListToCharacterGrid(List<Nugget> nuggets) {
-        this(
-                nuggets.stream().filter(n -> n instanceof WordList).map(n -> (WordList) n).findFirst()
-                        .orElseThrow(()-> { throw new IllegalArgumentException("no wordlist found");})
-        );
-        this.inputNuggets.addAll(nuggets);
-
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName();
     }
 
-    // Constructor that calculates dimensions automatically based on unique letters
-    public WordListToCharacterGrid(WordList wordList) {
-        this.random = new Random();
+    @Override
+    public List<CharacterGrid> apply(List<Nugget> nuggets) {
+        var wordList = nuggets.stream().filter(n -> n instanceof WordList).map(n -> (WordList) n).findFirst()
+                .orElseThrow(()-> { throw new IllegalArgumentException("no wordlist found");});
+        return apply(wordList);
+    }
 
+    public List<CharacterGrid> apply(WordList wordList) {
         List<Character> uniqueLetters = collectUniqueLetters(wordList);
         int uniqueLetterCount = uniqueLetters.size();
 
         // Calculate n and m based on the number of unique letters
         int sideLength = (int) Math.ceil(Math.sqrt(uniqueLetterCount));
-        this.n = sideLength;
-        this.m = sideLength;
+        int n = sideLength;
+        int m = sideLength;
 
         // Adjust m if necessary to ensure enough space
         while (n * m < uniqueLetterCount) {
@@ -47,71 +44,53 @@ public class WordListToCharacterGrid implements NuggetProvider<CharacterGrid> {
             }
         }
 
-        this.grid = new char[n][m];
-        createGrid(wordList);
+        // Create grid using functional approach (no instance variables)
+        char[][] grid = createGrid(n, m, wordList);
+        return List.of(new CharacterGrid(grid));
     }
 
-    // Constructor with specified dimensions
-    public WordListToCharacterGrid(WordList wordList, int n, int m) {
-        this.n = n;
-        this.m = m;
-        this.grid = new char[n][m];
-        this.random = new Random();
-        createGrid(wordList);
+    // Helper method to collect unique letters from a WordList
+    private List<Character> collectUniqueLetters(WordList wordList) {
+        return wordList.getItems().stream()
+                .flatMapToInt(String::chars)
+                .mapToObj(c -> (char) c)
+                .collect(Collectors.toSet()) // Collect to a Set to ensure uniqueness
+                .stream()
+                .collect(Collectors.toList()); // Convert Set to List for further use
     }
 
-    // Method to initialize and fill the grid
-    private void createGrid(WordList wordList) {
+    // Helper method to create the character grid
+    private char[][] createGrid(int n, int m, WordList wordList) {
         List<Character> letters = collectUniqueLetters(wordList);
         if (letters.size() > m * n) {
             throw new IllegalArgumentException("Unique letters exceed grid capacity.");
         }
-        fillWithRandomLetters(letters);
-        populateGrid(letters);
-        characterGrid = new CharacterGrid(grid);
-    }
 
-    @Override
-    public List<Nugget> getInputNuggets() {
-        return inputNuggets;
-    }
-
-    // Method to get the list of nuggets
-    @Override
-    public List<CharacterGrid> getOutputNuggets() {
-        return List.of(characterGrid);
-    }
-
-    // Collect unique letters from words
-    private List<Character> collectUniqueLetters(WordList wordList) {
-        Set<Character> uniqueLettersSet = new HashSet<>();
-        for (String word : wordList.getItems()) {
-            for (char letter : word.toCharArray()) {
-                uniqueLettersSet.add(letter);
-            }
-        }
-        return new ArrayList<>(uniqueLettersSet);
+        List<Character> allLetters = fillWithRandomLetters(letters, n * m);
+        return populateGrid(n, m, allLetters);
     }
 
     // Fill up the list with random letters until it matches the grid size
-    private void fillWithRandomLetters(List<Character> letters) {
-        int totalCells = n * m;
+    private List<Character> fillWithRandomLetters(List<Character> letters, int totalCells) {
         int remainingCells = totalCells - letters.size();
+        List<Character> randomLetters = new ArrayList<>(letters);
+
         for (int i = 0; i < remainingCells; i++) {
-            letters.add((char) ('a' + random.nextInt(26))); // Random letter from a-z
+            randomLetters.add((char) ('a' + new Random().nextInt(26))); // Random letter from a-z
         }
-        Collections.shuffle(letters); // Shuffle to randomly distribute unique and padding letters
+        Collections.shuffle(randomLetters); // Shuffle to randomly distribute unique and padding letters
+        return randomLetters;
     }
 
-    // Populate the grid with letters
-    private void populateGrid(List<Character> letters) {
+    // Helper method to populate the grid with letters
+    private char[][] populateGrid(int n, int m, List<Character> letters) {
+        char[][] grid = new char[n][m];
         int index = 0;
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
                 grid[i][j] = letters.get(index++);
             }
         }
+        return grid;
     }
-
-
 }

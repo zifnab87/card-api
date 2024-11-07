@@ -11,11 +11,14 @@ public class CharacterGrid implements Nugget {
         return grid;
     }
 
+
     @Override
-    public void print() {
-        System.out.println("\nGrid ->");
+    public String toString() {
+        StringBuilder sb = new StringBuilder("\n\t"+this.getClass().getSimpleName()+" [\n");
         for (char[] line : this.grid) {
-            System.out.println(new String(line));
+            var newLine = String.join(" ", new String(line).split(""));
+            sb.append("\t\t"+newLine).append("\n");
         }
+        return sb.append("\t]\n").toString();
     }
 }
